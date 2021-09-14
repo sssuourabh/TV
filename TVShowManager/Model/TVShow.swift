@@ -10,7 +10,7 @@ import Parse
 
 class TVShow: PFObject, PFSubclassing {
     @NSManaged var title: String
-    @NSManaged var year: NSNumber
+    @NSManaged var years: NSNumber
     @NSManaged var seasons: NSNumber
     
     static func parseClassName() -> String {
@@ -19,6 +19,7 @@ class TVShow: PFObject, PFSubclassing {
     
     override class func query() -> PFQuery<PFObject>? {
         let query = PFQuery(className: TVShow.parseClassName())
+        query.order(byDescending: "createdAt")
         return query
     }
 }

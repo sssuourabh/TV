@@ -9,11 +9,19 @@ import Foundation
 import UIKit
 import Cartography
 import Parse
+import Combine
 
-class AddTVShowController: UIViewController {
+class AddTVShowController: UIViewController, UITextFieldDelegate {
+    
+    @Published private var tvShowTitle: String = ""
+    @Published private var releaseYear: String = ""
+    @Published private var numberOfSeasons: String = ""
     
     private let addTVShowView = AddTVShowView()
-    
+    private var activityIndicator = UIActivityIndicatorView(style: .large)
+
+    private var stream: AnyCancellable?
+
     init() {
         super.init(nibName: nil, bundle: nil)
         if #available(iOS 14.0, *) {
@@ -34,31 +42,71 @@ class AddTVShowController: UIViewController {
         view.backgroundColor = .white
     
         view.addSubview(addTVShowView)
-
-        Cartography.constrain(addTVShowView) {
+        view.addSubview(activityIndicator)
+        Cartography.constrain(addTVShowView, activityIndicator) {
             $0.edges == $0.superview!.edges
+            $1.width == 100
+            $1.height == 100
+            $1.centerX == $1.superview!.centerX
+            $1.centerY == $1.superview!.centerY
         }
 
         addTVShowView.saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+        addTVShowView.saveButton.isEnabled = false
+
+        for textfield in [addTVShowView.titleTextField, addTVShowView.numberOfSeasonsTextField, addTVShowView.yearOfReleaseTextField] {
+            textfield.delegate = self
+        }
     }
     
     override func viewDidLoad() {
-
+        stream = validToSave
+            .receive(on: RunLoop.main)
+            .assign(to: \.isEnabled, on: addTVShowView.saveButton)
+    }
+    
+    private var validToSave: AnyPublisher<Bool, Never> {
+        let year = Calendar.current.component(.year, from: Date())
+        return Publishers.CombineLatest3($tvShowTitle, $releaseYear, $numberOfSeasons)
+            .map { title, release, seasons in
+                !title.isBlank && !release.isBlank && (Int(release) ?? year <= year) && !seasons.isBlank
+            }.eraseToAnyPublisher()
     }
     
     @objc private func saveTapped() {
-        let tvShow = PFObject(className: "TVShow")
-        tvShow["title"] = "Stranger things"
-        tvShow["years"] = 2014
-        tvShow["seasons"] = 4
-        print("tvshowid = \(String(describing: tvShow.objectId))")
+        view.endEditing(true)
+        let tvShow = PFObject.init(className: TVShow.parseClassName())
+        tvShow["title"] = tvShowTitle
+        tvShow["years"] = Int(releaseYear)
+        tvShow["seasons"] = Int(numberOfSeasons)
+        activityIndicator.startAnimating()
         tvShow.saveInBackground { [weak self] (succeeded, error) in
             guard let self = self else { return}
-            if succeeded {
-                self.navigationController?.popToRootViewController(animated: true)
-            } else {
-                print(error?.localizedDescription)
+            self.activityIndicator.stopAnimating()
+            if error == nil {
+                self.navigationController?.popViewController(animated: true)
             }
         }
+    }
+    
+    // MARK: UitextFieldDelegate
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        switch textField {
+        case (addTVShowView.titleTextField):
+            tvShowTitle = newText
+        case (addTVShowView.yearOfReleaseTextField):
+            releaseYear = newText
+        case (addTVShowView.numberOfSeasonsTextField):
+            numberOfSeasons = newText
+        default:
+            assertionFailure("Unknown textfield ")
+        }
+        return true
     }
 }

@@ -24,6 +24,7 @@ class ShowTVShowListController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.allowsSelection = false
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.separatorStyle = .none
         tableView.backgroundColor = .tertiarySystemGroupedBackground
@@ -86,16 +87,5 @@ extension ShowTVShowListController {
             cells.append(CellNode(id: "cell", tvShowComponent))
         }
         return [Section(id: "TVShowListComponents", cells: cells)]
-    }
-}
-
-extension UIView {
-    func addHomeDropShadow() {
-        backgroundColor = UIColor.clear
-        layer.shadowColor = UIColor.darkGray.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowRadius = 4
-        layer.shadowOpacity = 0.1
-        layer.masksToBounds = false
     }
 }

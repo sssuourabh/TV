@@ -57,7 +57,7 @@ class HomeViewController: UIViewController {
     func updateButtonsUI() {
         [addNewTVShowButton, showListButton].forEach { button in
             button.layer.cornerRadius = 20
-            button.backgroundColor = .systemBlue.withAlphaComponent(0.8)
+            button.backgroundColor = .systemBlue
         }
     }
 

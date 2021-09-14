@@ -15,6 +15,7 @@ class TVShowView: UIView {
     let showNameLabel = UILabel()
     let releaseYearLabel = UILabel()
     let seasonsLabel = UILabel()
+    //let deleteButton = UIButton
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,15 +25,15 @@ class TVShowView: UIView {
         showNameLabel.numberOfLines = 0
         for label in [showNameLabel, releaseYearLabel, seasonsLabel] {
             label.textColor = .gray
-            label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+            label.setContentCompressionResistancePriority(.required, for: .vertical)
         }
         
         let containerView = UIView()
-        containerView.addHomeDropShadow()
+        containerView.addDropShadow()
         containerView.addSubview(showNameLabel)
         containerView.addSubview(releaseYearLabel)
         containerView.addSubview(seasonsLabel)
-        containerView.layer.cornerRadius = 10
+        containerView.layer.cornerRadius = 5
         containerView.backgroundColor = .white
         
         addSubview(containerView)
@@ -77,7 +78,7 @@ struct TVShowViewItemComponent: IdentifiableComponent {
 
     public func render(in content: TVShowView) {
         content.showNameLabel.text = tvShow.title
-        content.releaseYearLabel.text = "\(tvShow.year)"
+        content.releaseYearLabel.text = "\(tvShow.years)"
         content.seasonsLabel.text = "\(tvShow.seasons)"
     }
 

@@ -17,6 +17,7 @@
 		6A3CBFA126EFBA6500190094 /* AddTVShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3CBFA026EFBA6500190094 /* AddTVShowView.swift */; };
 		6A3CBFA426EFCE7E00190094 /* TVShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3CBFA326EFCE7E00190094 /* TVShowView.swift */; };
 		6A3CBFA726EFDB9100190094 /* TVShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3CBFA626EFDB9100190094 /* TVShow.swift */; };
+		6A3CBFA926F06D3900190094 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3CBFA826F06D3900190094 /* Utilities.swift */; };
 		6A49F81626EFAAE900D4B231 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49F81526EFAAE900D4B231 /* AppDelegate.swift */; };
 		6A49F81826EFAAE900D4B231 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49F81726EFAAE900D4B231 /* SceneDelegate.swift */; };
 		6A49F81F26EFAAEA00D4B231 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A49F81E26EFAAEA00D4B231 /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		6A3CBFA026EFBA6500190094 /* AddTVShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTVShowView.swift; sourceTree = "<group>"; };
 		6A3CBFA326EFCE7E00190094 /* TVShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowView.swift; sourceTree = "<group>"; };
 		6A3CBFA626EFDB9100190094 /* TVShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShow.swift; sourceTree = "<group>"; };
+		6A3CBFA826F06D3900190094 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		6A49F81226EFAAE900D4B231 /* TVShowManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVShowManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A49F81526EFAAE900D4B231 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A49F81726EFAAE900D4B231 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				6A3CBF9226EFAFEE00190094 /* Constants.swift */,
+				6A3CBFA826F06D3900190094 /* Utilities.swift */,
 			);
 			path = UTILS;
 			sourceTree = "<group>";
@@ -485,6 +488,7 @@
 			files = (
 				6A49F81626EFAAE900D4B231 /* AppDelegate.swift in Sources */,
 				6A49F81826EFAAE900D4B231 /* SceneDelegate.swift in Sources */,
+				6A3CBFA926F06D3900190094 /* Utilities.swift in Sources */,
 				6A3CBF9E26EFB97500190094 /* ShowTVShowListController.swift in Sources */,
 				6A3CBF9B26EFB95400190094 /* AddTVShowController.swift in Sources */,
 				6A3CBF9026EFAF6800190094 /* HomeViewController.swift in Sources */,
