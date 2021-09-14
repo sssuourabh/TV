@@ -58,3 +58,14 @@ extension Optional where Wrapped == String {
         return self?.isBlank ?? true
     }
 }
+
+extension UIViewController {
+  
+  func showErrorView(error: NSError) {
+    if let errorMessage = error.userInfo["error"] as? String {
+        let alert = UIAlertController(title: "Alert", message: errorMessage, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+  }
+}

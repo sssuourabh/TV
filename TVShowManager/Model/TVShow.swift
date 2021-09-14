@@ -8,16 +8,16 @@
 import Foundation
 import Parse
 
-class TVShow: PFObject, PFSubclassing {
+public class TVShow: PFObject, PFSubclassing {
     @NSManaged var title: String
     @NSManaged var years: Int
     @NSManaged var seasons: Int
     
-    static func parseClassName() -> String {
+    public static func parseClassName() -> String {
         return "TVShow"
     }
     
-    override class func query() -> PFQuery<PFObject>? {
+    public override class func query() -> PFQuery<PFObject>? {
         let query = PFQuery(className: TVShow.parseClassName())
         query.order(byDescending: "createdAt")
         return query

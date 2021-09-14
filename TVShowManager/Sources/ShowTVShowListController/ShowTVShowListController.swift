@@ -10,9 +10,11 @@ import UIKit
 import Carbon
 import Cartography
 import Parse
+import Combine
 
 class ShowTVShowListController: UIViewController {
 
+    // MARK: Properties
     private var tvShows = [TVShow]() {
         didSet {
             renderer.render(makeSections())
@@ -35,9 +37,12 @@ class ShowTVShowListController: UIViewController {
         adapter: UITableViewAdapter(),
         updater: UITableViewUpdater()
     )
+    private var subscriptions: Set<AnyCancellable> = []
+    public let client: GetDataClient
     
     // MARK: Initialization
-    init() {
+    init(client: GetDataClient) {
+        self.client = client
         super.init(nibName: nil, bundle: nil)
         title = NSLocalizedString("TV Show List", comment: "Title string")
     }
@@ -67,15 +72,18 @@ class ShowTVShowListController: UIViewController {
     }
     
     private func retrieveTVShows() {
-        let query = TVShow.query()
-        query?.findObjectsInBackground(block: { [weak self] shows, error in
-            self?.activityIndicator.stopAnimating()
-            if error == nil {
-                if let shows = shows as? [TVShow] {
-                    self?.tvShows = shows
+        client.getAllTVShows()
+            .sink { [weak self] completion in
+                self?.activityIndicator.stopAnimating()
+                switch completion {
+                case .failure(let error):
+                    self?.showErrorView(error: error as NSError)
+                case .finished:
+                    break
                 }
-            }
-        })
+            } receiveValue: { [weak self] tvShows in
+                self?.tvShows = tvShows
+            }.store(in: &subscriptions)
     }
 }
 

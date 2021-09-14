@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import Combine
+import Parse
 
 public protocol HomeViewRouter {
     func presentListOfTVShowController(from: UIViewController)
@@ -15,12 +17,12 @@ public protocol HomeViewRouter {
 
 class HomeViewRouterImpl: HomeViewRouter {
     func presentListOfTVShowController(from: UIViewController) {
-        let showListOfTVShows = ShowTVShowListController()
+        let showListOfTVShows = ShowTVShowListController(client: GetDataCleintImpl())
         from.navigationController?.pushViewController(showListOfTVShows, animated: true)
     }
     
     func presentAddTVShowController(from: UIViewController) {
-        let addTvShowController = AddTVShowController()
+        let addTvShowController = AddTVShowController(client: SaveDataClientImpl())
         from.navigationController?.pushViewController(addTvShowController, animated: true)
     }
 }

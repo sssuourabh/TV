@@ -13,6 +13,7 @@ import Combine
 
 class AddTVShowController: UIViewController, UITextFieldDelegate {
     
+    //MARK: Properties
     @Published private var tvShowTitle: String = ""
     @Published private var releaseYear: String = ""
     @Published private var numberOfSeasons: String = ""
@@ -21,8 +22,12 @@ class AddTVShowController: UIViewController, UITextFieldDelegate {
     private var activityIndicator = UIActivityIndicatorView(style: .large)
 
     private var stream: AnyCancellable?
-
-    init() {
+    private var subscriptions: Set<AnyCancellable> = []
+    public let client: SaveDataClient
+    
+    // MARK: Initialization
+    init(client: SaveDataClient) {
+        self.client = client
         super.init(nibName: nil, bundle: nil)
         if #available(iOS 14.0, *) {
             navigationItem.backButtonTitle = NSLocalizedString("Add TV show", comment: "")
@@ -77,19 +82,21 @@ class AddTVShowController: UIViewController, UITextFieldDelegate {
         view.endEditing(true)
         let tvShow = TVShow(title: tvShowTitle, years: Int(releaseYear) ?? 0, seasons: Int(numberOfSeasons) ?? 0)
         activityIndicator.startAnimating()
-        tvShow.saveInBackground { [weak self] (succeeded, error) in
-            guard let self = self else { return}
-            self.activityIndicator.stopAnimating()
-            if error == nil {
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
+        client.saveTVShow(tvShow: tvShow)
+            .sink { [weak self] completion in
+                self?.activityIndicator.stopAnimating()
+                switch completion {
+                case .finished:
+                    self?.navigationController?.popToRootViewController(animated: true)
+                case .failure(let error):
+                    self?.showErrorView(error: error as NSError)
+                }
+            } receiveValue: { _ in
+                // do nothing
+            }.store(in: &subscriptions)
     }
     
-    // MARK: UitextFieldDelegate
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        
-    }
+    // MARK: UITextFieldDelegate
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let currentText = textField.text ?? ""
