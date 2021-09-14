@@ -75,10 +75,7 @@ class AddTVShowController: UIViewController, UITextFieldDelegate {
     
     @objc private func saveTapped() {
         view.endEditing(true)
-        let tvShow = PFObject.init(className: TVShow.parseClassName())
-        tvShow["title"] = tvShowTitle
-        tvShow["years"] = Int(releaseYear)
-        tvShow["seasons"] = Int(numberOfSeasons)
+        let tvShow = TVShow(title: tvShowTitle, years: Int(releaseYear) ?? 0, seasons: Int(numberOfSeasons) ?? 0)
         activityIndicator.startAnimating()
         tvShow.saveInBackground { [weak self] (succeeded, error) in
             guard let self = self else { return}
